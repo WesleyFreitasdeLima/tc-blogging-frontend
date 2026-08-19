@@ -1,7 +1,10 @@
 import { useEffect } from 'react'
 import { Route, Routes, useLocation } from 'react-router'
 
-import { AuthPage } from '@/view/pages/auth'
+// import { AuthPage } from '@/view/pages/auth'
+import { HomePage } from '@/view/pages/home'
+import { MainLayout } from '@/view/layouts/main-layout'
+import { PostPage } from '@/view/pages/post'
 
 export function Router() {
   const location = useLocation()
@@ -12,7 +15,11 @@ export function Router() {
 
   return (
     <Routes>
-      <Route path="/" element={<AuthPage />} />
+      <Route path="/" element={<MainLayout />}>
+        <Route path="/" element={<HomePage />} />
+
+        <Route path="/post/:id" element={<PostPage />} />
+      </Route>
     </Routes>
   )
 }
