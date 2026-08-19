@@ -5,6 +5,7 @@ import { Route, Routes, useLocation } from 'react-router'
 import { HomePage } from '@/view/pages/home'
 import { MainLayout } from '@/view/layouts/main-layout'
 import { PostPage } from '@/view/pages/post'
+import { AuthPage } from '@/view/pages/auth'
 
 export function Router() {
   const location = useLocation()
@@ -19,6 +20,8 @@ export function Router() {
         <Route path="/" element={<HomePage />} />
 
         <Route path="/post/:id" element={<PostPage />} />
+
+        <Route path="/auth" element={<AuthPage />} />
       </Route>
     </Routes>
   )

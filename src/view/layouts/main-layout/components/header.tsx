@@ -69,8 +69,10 @@ export function Header() {
               </Button>
             </>
           ) : (
-            <Button variant="outline" onClick={() => {}}>
-              <LogIn className="mr-1" data-icon="inline-start" /> Entrar
+            <Button variant="outline" asChild>
+              <Link to="/auth">
+                <LogIn className="mr-1" data-icon="inline-start" /> Entrar
+              </Link>
             </Button>
           )}
         </div>
@@ -101,7 +103,7 @@ export function Header() {
               <LogOut /> Sair
             </button>
           ) : (
-            <Link to="/login">Entrar</Link>
+            <Link to="/auth">Entrar</Link>
           )}
         </div>
       )}
