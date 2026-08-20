@@ -37,6 +37,7 @@ export function Header() {
           <nav className="hidden items-center gap-7 text-sm font-medium text-muted-foreground md:flex">
             {menuLinks.map((link) => (
               <NavLink
+                key={link.label}
                 className={({ isActive }) =>
                   isActive
                     ? 'text-foreground'

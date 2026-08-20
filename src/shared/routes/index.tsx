@@ -6,6 +6,8 @@ import { HomePage } from '@/view/pages/home'
 import { MainLayout } from '@/view/layouts/main-layout'
 import { PostPage } from '@/view/pages/post'
 import { AuthPage } from '@/view/pages/auth'
+import { NewPostPage } from '@/view/pages/new-post'
+import { AdminPostsPage } from '@/view/pages/admin'
 
 export function Router() {
   const location = useLocation()
@@ -19,9 +21,13 @@ export function Router() {
       <Route path="/" element={<MainLayout />}>
         <Route path="/" element={<HomePage />} />
 
-        <Route path="/post/:id" element={<PostPage />} />
+        <Route path="/posts/:id" element={<PostPage />} />
 
         <Route path="/auth" element={<AuthPage />} />
+
+        <Route path="/posts/new" element={<NewPostPage />} />
+
+        <Route path="/admin/posts" element={<AdminPostsPage />} />
       </Route>
     </Routes>
   )

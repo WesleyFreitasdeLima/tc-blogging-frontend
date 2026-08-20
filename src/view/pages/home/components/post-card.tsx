@@ -11,7 +11,7 @@ export function PostCard({ post }: { post: Post }) {
             <Clock3 /> {post.readTime} min de leitura
           </span>
         </div>
-        <Link to={`/post/${post.id}`}>
+        <Link to={`/posts/${post.id}`}>
           <h3 className="text-2xl leading-tight group-hover:text-primary">
             {post.title}
           </h3>
@@ -23,7 +23,7 @@ export function PostCard({ post }: { post: Post }) {
       <div className="mt-8 flex items-center justify-between border-t border-border pt-4 text-sm">
         <span className="text-muted-foreground">{post.author}</span>
         <Link
-          to={`/post/${post.id}`}
+          to={`/posts/${post.id}`}
           aria-label={`Ler ${post.title}`}
           className="flex size-9 items-center justify-center rounded-full bg-secondary text-foreground transition group-hover:bg-primary group-hover:text-primary-foreground"
         >
