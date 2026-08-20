@@ -10,11 +10,18 @@ export function HomePage() {
       <section className="grid gap-10 border-b border-border pb-12 lg:grid-cols-[1.15fr_.85fr] lg:items-end">
         <div>
           <p className="mb-5 text-xs font-bold uppercase tracking-[0.2em] text-primary">{`// ${'Ideias que atravessam'}`}</p>
-          <h1 className="max-w-3xl text-5xl leading-[1.05] tracking-tight text-foreground md:text-7xl">
+          <h1
+            data-aos="fade-up"
+            className="max-w-3xl text-5xl leading-[1.05] tracking-tight text-foreground md:text-7xl"
+          >
             Pensar junto muda o que{' '}
             <span className="text-primary">podemos fazer.</span>
           </h1>
-          <p className="mt-6 max-w-xl text-base leading-7 text-muted-foreground">
+          <p
+            data-aos="fade-up"
+            data-aos-delay="300"
+            className="mt-6 max-w-xl text-base leading-7 text-muted-foreground"
+          >
             Textos, perguntas e descobertas de quem faz da universidade um lugar
             de encontro com o mundo.
           </p>
@@ -34,7 +41,7 @@ export function HomePage() {
           <div>
             <p className="text-sm text-muted-foreground">
               {!isLoading
-                ? `${posts.length} publica${posts.length > 1 ? 'ção' : 'ções'} encontradas`
+                ? `${posts.length} publica${posts.length > 1 ? 'ções' : 'ção'} encontra${posts.length > 1 ? 'das' : 'da'}`
                 : 'Carregando publicações...'}
             </p>
           </div>

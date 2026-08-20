@@ -91,11 +91,10 @@ export function Header() {
 
       {open && (
         <div className="flex flex-col gap-4 border-t border-border bg-background px-5 py-5 md:hidden">
-          <Link to="/posts">Posts</Link>
-          {user && <Link to="/posts/novo">Escrever</Link>}
-          {user?.role === 'admin' && (
-            <Link to="/admin/posts">Administração</Link>
-          )}
+          {menuLinks.map((link) => (
+            <Link to={link.link}>{link.label}</Link>
+          ))}
+
           {user ? (
             <button
               className="flex items-center gap-2 text-left text-muted-foreground"

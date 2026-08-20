@@ -39,7 +39,10 @@ export function AdminPostsPage() {
   return (
     <>
       <div className="flex flex-col gap-10">
-        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div
+          data-aos="fade-up"
+          className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
+        >
           <div>
             <p className="text-sm font-semibold uppercase tracking-wider text-primary">
               Painel editorial
@@ -54,7 +57,11 @@ export function AdminPostsPage() {
           </Button>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div
+          data-aos="fade-up"
+          data-aos-delay="300"
+          className="grid gap-4 sm:grid-cols-3"
+        >
           <Metric
             icon={<FileText />}
             label="Total de posts"
@@ -70,7 +77,11 @@ export function AdminPostsPage() {
           />
         </div>
 
-        <div className="rounded-2xl border border-border bg-card shadow-sm">
+        <div
+          data-aos="fade-up"
+          data-aos-delay="600"
+          className="rounded-2xl border border-border bg-card shadow-sm"
+        >
           <div className="flex flex-col gap-4 border-b border-border p-5 md:flex-row md:items-center md:justify-between">
             <div className="flex items-center gap-3 rounded-lg border border-input px-3 py-2 md:w-80">
               <Search className="text-muted-foreground" />

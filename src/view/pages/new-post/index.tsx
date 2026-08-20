@@ -17,9 +17,13 @@ export function NewPostPage() {
       <p className="text-sm font-semibold uppercase tracking-wider text-primary">
         Nova publicação
       </p>
-      <h1 className="mt-3 text-5xl">O que você quer colocar em movimento?</h1>
+      <h1 data-aos="fade-up" className="mt-3 text-5xl">
+        O que você quer colocar em movimento?
+      </h1>
 
       <form
+        data-aos="fade-up"
+        data-aos-delay="300"
         onSubmit={handleSubmit(onSubmitNewPost)}
         className="mt-10 flex flex-col gap-6"
       >
@@ -55,7 +59,11 @@ export function NewPostPage() {
           )}
         </div>
 
-        <div className="flex justify-end gap-3">
+        <div
+          className="flex justify-end gap-3"
+          data-aos="fade-up"
+          data-aos-delay="600"
+        >
           <Button type="button" variant="outline" asChild>
             <Link to="/">Cancelar</Link>
           </Button>

@@ -19,9 +19,13 @@ export function PostPage() {
       <p className="text-sm font-semibold uppercase tracking-wider text-primary">
         Publicação
       </p>
-      <h1 className="mt-4 md:max-w-10/12 text-5xl leading-tight tracking-tight md:text-6xl">
+      <h1
+        data-aos="fade-up"
+        className="mt-4 md:max-w-10/12 text-5xl leading-tight tracking-tight md:text-6xl"
+      >
         {post.title}
       </h1>
+
       <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
         <span>{post.author}</span>
         <span>·</span>
@@ -29,11 +33,20 @@ export function PostPage() {
         <span>·</span>
         <span>{post.readTime} min de leitura</span>
       </div>
+
       <div className="my-12 h-px bg-border" />
-      <div className="whitespace-pre-line text-lg leading-8 text-foreground/85">
+      <div
+        data-aos="fade-up"
+        data-aos-delay="300"
+        className="whitespace-pre-line text-lg leading-8 text-foreground/85"
+      >
         {post.content}
       </div>
-      <div className="mt-14 rounded-2xl bg-primary p-7 text-primary-foreground">
+      <div
+        data-aos="fade-up"
+        data-aos-delay="600"
+        className="mt-14 rounded-2xl bg-primary p-7 text-primary-foreground"
+      >
         <p className="text-sm font-semibold uppercase tracking-wider text-primary-foreground/70">
           Continue a conversa
         </p>

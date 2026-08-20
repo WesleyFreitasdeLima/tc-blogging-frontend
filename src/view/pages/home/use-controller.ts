@@ -16,6 +16,24 @@ export function useController() {
       createdAt: '18 ago 2026',
       readTime: 2,
     },
+    {
+      id: 2,
+      author: 'Prof. Teste',
+      content:
+        'Reflexões sobre como a escuta ativa transforma a experiência de aprender e ensinar.',
+      title: 'A universidade como espaço de escuta',
+      createdAt: '18 ago 2026',
+      readTime: 2,
+    },
+    {
+      id: 3,
+      author: 'Prof. Teste',
+      content:
+        'Reflexões sobre como a escuta ativa transforma a experiência de aprender e ensinar.',
+      title: 'A universidade como espaço de escuta',
+      createdAt: '18 ago 2026',
+      readTime: 2,
+    },
   ]
 
   return {
