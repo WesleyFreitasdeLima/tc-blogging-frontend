@@ -1,75 +1,46 @@
-# React + TypeScript + Vite
+# TC-BLOGGING - Front-end
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Front-end para um sistema de blog, desenvolvida como parte do Tech Challenge da FIAP!
 
-Currently, two official plugins are available:
+![Screenshot](./public/cover.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Tecnologias
 
-## React Compiler
+- [React](https://react.dev/) - Framework web
+- [Typescript](https://www.typescriptlang.org/) - Superset do javascript
+- [React Router](https://reactrouter.com/) - Gerenciador de rotas do React
+- [Vite](https://vite.dev/) - Bundler e dev-server
+- [Shadcn/UI](https://ui.shadcn.com/) - Componentes com funcionalidades prontas para interface
+- [Tailwind CSS](https://tailwindcss.com/) - Framework CSS
+- [Lucide](https://lucide.dev/) - Lib de ícones
+- [Zod](https://zod.dev/) - Validador de schemas typescript
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 📦️ Pré-Requisitos
 
-## Expanding the ESLint configuration
+Antes de começar você vai precisar ter instalado na sua máquina as ferramentas [Git](https://git-scm.com/).
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## ⚡ Executando o projeto
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. Clone o repositório
 
 ```
+  git clone https://github.com/WesleyFreitasdeLima/tc-blogging-frontend.git
+```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Acesse o container do node e rode o comando para instalar as dependências na pasta principal
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```
+  npm install
+```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+3. Rode o comando para rodar a aplicação
 
+```
+  npm run dev
+```
+
+4. Acesse pelo navegador
+
+```
+  http://localhost:5173
 ```
