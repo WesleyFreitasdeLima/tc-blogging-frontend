@@ -16,6 +16,7 @@ export function EditPostModal(props: EditPostModalProps) {
     onOpenChange,
     errors,
     handleSubmit,
+    clearErrors,
     register,
     onSubmitEditPost,
     saveButtonIsDisabled,
@@ -23,8 +24,8 @@ export function EditPostModal(props: EditPostModalProps) {
 
   return (
     <Sheet open={openIsValid} onOpenChange={onOpenChange}>
-      <form onSubmit={handleSubmit(onSubmitEditPost)}>
-        <SheetContent>
+      <SheetContent>
+        <form onSubmit={handleSubmit(onSubmitEditPost)}>
           <SheetHeader>
             <SheetTitle>Editar postagem</SheetTitle>
             <SheetDescription>
@@ -36,12 +37,19 @@ export function EditPostModal(props: EditPostModalProps) {
 
           <div className="grid flex-1 auto-rows-min gap-6 px-4">
             <div className="space-y-2">
+              {errors.root?.serverError && (
+                <div className="text-red-500">
+                  {errors.root.serverError.message}
+                </div>
+              )}
               <label className="flex flex-col gap-2 text-sm font-semibold">
                 Título
                 <input
                   className="rounded-lg border border-input bg-card px-4 py-3 font-normal outline-none ring-primary focus:ring-2"
                   placeholder="Um título que desperte curiosidade"
-                  {...register('title')}
+                  {...register('title', {
+                    onChange: () => clearErrors('root.serverError'),
+                  })}
                 />
               </label>
 
@@ -58,7 +66,9 @@ export function EditPostModal(props: EditPostModalProps) {
                 <textarea
                   className="min-h-64 resize-y rounded-lg border border-input bg-card px-4 py-3 font-normal leading-7 outline-none ring-primary focus:ring-2"
                   placeholder="Escreva a sua reflexão..."
-                  {...register('content')}
+                  {...register('content', {
+                    onChange: () => clearErrors('root.serverError'),
+                  })}
                 />
               </label>
 
@@ -78,8 +88,8 @@ export function EditPostModal(props: EditPostModalProps) {
               <Button variant="outline">Cancelar</Button>
             </SheetClose>
           </SheetFooter>
-        </SheetContent>
-      </form>
+        </form>{' '}
+      </SheetContent>
     </Sheet>
   )
 }

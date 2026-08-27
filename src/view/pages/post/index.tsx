@@ -27,11 +27,10 @@ export function PostPage() {
       </h1>
 
       <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
-        <span>{post.author}</span>
+        <span>{post.createdBy.name}</span>
         <span>·</span>
-        <span>{post.createdAt}</span>
+        <span>{new Date(post.createdAt).toLocaleString('pt-BR')}</span>
         <span>·</span>
-        <span>{post.readTime} min de leitura</span>
       </div>
 
       <div className="my-12 h-px bg-border" />

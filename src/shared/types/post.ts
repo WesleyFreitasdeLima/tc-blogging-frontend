@@ -1,3 +1,8 @@
+export interface PostAuthor {
+  id: number
+  name: string
+}
+
 export interface Post {
   id: number
   title: string
@@ -5,14 +10,8 @@ export interface Post {
   createdAt: string
   updatedAt?: string
   isActive: boolean
-  createdBy: {
-    id: number
-    name: string
-  }
-  updatedBy?: {
-    id: number
-    name: string
-  } | null
+  createdBy?: PostAuthor | null
+  updatedBy?: PostAuthor | null
 }
 
 export interface CreatePostRequest {
@@ -25,8 +24,13 @@ export interface UpdatePostRequest {
   content: string
 }
 
-export type PostListParams = {
+export interface ListPostsParams {
   page?: number
   limit?: number
-  search?: string
+}
+
+export interface SearchPostsParams {
+  search: string
+  page?: number
+  limit?: number
 }

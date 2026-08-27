@@ -8,7 +8,7 @@ export function NewPostPage() {
 
   return (
     <div className="mx-auto max-w-3xl">
-      <Link to="/">
+      <Link to="/admin/posts">
         <span className="mb-10 inline-flex items-center gap-2 text-sm text-muted-foreground">
           <ArrowLeft /> Cancelar
         </span>
@@ -28,6 +28,11 @@ export function NewPostPage() {
         className="mt-10 flex flex-col gap-6"
       >
         <div className="space-y-2">
+          {errors.root?.serverError && (
+            <div className="text-red-500">
+              {errors.root.serverError.message}
+            </div>
+          )}
           <label className="flex flex-col gap-2 text-sm font-semibold">
             Título
             <input

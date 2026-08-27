@@ -4,14 +4,14 @@ import { useController } from './use-controller'
 
 export function AuthPage() {
   const {
-    errors,
-    handleSubmit,
-    onSubmitAuth,
     register,
+    handleSubmit,
+    errors,
+    clearErrors,
+    onSubmitAuth,
     handleViewPassword,
     passwordView,
   } = useController()
-
   return (
     <div className="h-full mx-auto grid overflow-hidden rounded-3xl border border-border bg-card shadow-sm md:grid-cols-2">
       <div className="bg-white/10 p-8 text-primary-foreground md:p-12 flex flex-col justify-between">
@@ -38,18 +38,26 @@ export function AuthPage() {
         </div>
 
         <div className="space-y-2">
+          {errors.root?.serverError && (
+            <div className="text-red-500">
+              {errors.root.serverError.message}
+            </div>
+          )}
+
           <label className="flex flex-col gap-2 text-sm font-semibold">
-            E-mail
+            Login
             <input
-              type="email"
+              type="text"
               className="rounded-lg border border-input bg-background px-4 py-3 font-normal outline-none ring-primary focus:ring-2"
-              placeholder="voce@universidade.br"
-              {...register('email')}
+              placeholder="login"
+              {...register('login', {
+                onChange: () => clearErrors('root.serverError'),
+              })}
             />
           </label>
 
-          {errors.email?.message && (
-            <p className="text-sm text-destructive">{errors.email?.message}</p>
+          {errors.login?.message && (
+            <p className="text-sm text-destructive">{errors.login?.message}</p>
           )}
         </div>
 
@@ -61,7 +69,9 @@ export function AuthPage() {
                 type={passwordView ? 'password' : 'text'}
                 className="w-full rounded-lg border border-input bg-background px-4 py-3 font-normal outline-none ring-primary focus:ring-2"
                 placeholder="••••••••"
-                {...register('password')}
+                {...register('password', {
+                  onChange: () => clearErrors('root.serverError'),
+                })}
               />
 
               <Button
@@ -75,14 +85,7 @@ export function AuthPage() {
               </Button>
             </div>
           </label>
-
-          {errors.password?.message && (
-            <p className="text-sm text-destructive">
-              {errors.password?.message}
-            </p>
-          )}
         </div>
-
         <Button type="submit" className="mt-2">
           Entrar <ArrowRight data-icon="inline-end" />
         </Button>

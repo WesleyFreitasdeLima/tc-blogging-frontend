@@ -1,5 +1,8 @@
+import { queryClient } from '@/shared/config/query-client'
 import type { Post } from '@/shared/models/posts'
+import { postsService } from '@/shared/services/post/post.service'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
@@ -31,8 +34,10 @@ export function useController({
   const {
     register,
     handleSubmit,
+    setError,
+    clearErrors,
     formState: { errors, isDirty },
-    setValues,
+    reset,
   } = useForm<FormEditPostValues>({
     defaultValues: {
       content: post?.content,
@@ -41,16 +46,52 @@ export function useController({
     resolver: zodResolver(FormEditPostSchema),
   })
 
+  const editMutation = useMutation({
+    mutationFn: ({ id, data }: { id: number; data: FormEditPostValues }) =>
+      postsService.update(id, data),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['posts'],
+      })
+
+      onOpenChange(false)
+    },
+
+    onError: (error) => {
+      setError('root.serverError', {
+        message: error.message,
+      })
+    },
+  })
+
   function onSubmitEditPost(data: FormEditPostValues) {
-    console.log(data)
+    if (!post) {
+      return
+    }
+
+    clearErrors('root.serverError')
+    editMutation.mutate({
+      id: post.id,
+      data,
+    })
   }
 
   useEffect(() => {
-    setValues({
-      content: post?.content,
-      title: post?.title,
+    if (!post) {
+      reset({
+        content: '',
+        title: '',
+      })
+
+      return
+    }
+
+    reset({
+      content: post.content,
+      title: post.title,
     })
-  }, [post])
+  }, [post, reset])
 
   const saveButtonIsDisabled = !isDirty
 
@@ -60,6 +101,8 @@ export function useController({
     post,
     register,
     handleSubmit,
+    setError,
+    clearErrors,
     errors,
     onSubmitEditPost,
     saveButtonIsDisabled,

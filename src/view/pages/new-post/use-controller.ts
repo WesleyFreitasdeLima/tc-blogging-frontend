@@ -1,4 +1,6 @@
+import { postsService } from '@/shared/services/post/post.service'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 import z from 'zod'
@@ -16,23 +18,41 @@ type FormNewPostValues = z.infer<typeof FormNewPostSchema>
 
 export function useController() {
   const navigate = useNavigate()
-
   const {
     register,
     handleSubmit,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<FormNewPostValues>({
     resolver: zodResolver(FormNewPostSchema),
   })
 
+  const createMutation = useMutation({
+    mutationFn: postsService.create,
+
+    onSuccess: () => {
+      navigate('/admin/posts')
+    },
+
+    onError: (error) => {
+      setError('root.serverError', {
+        message: error.message,
+      })
+
+      return
+    },
+  })
+
   function onSubmitNewPost(data: FormNewPostValues) {
-    console.log(data)
-    navigate('/')
+    createMutation.mutate(data)
   }
 
   return {
     register,
     handleSubmit,
+    setError,
+    clearErrors,
     errors,
     onSubmitNewPost,
   }

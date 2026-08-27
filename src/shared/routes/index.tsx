@@ -8,6 +8,7 @@ import { PostPage } from '@/view/pages/post'
 import { AuthPage } from '@/view/pages/auth'
 import { NewPostPage } from '@/view/pages/new-post'
 import { AdminPostsPage } from '@/view/pages/admin'
+import { AdminUsersPage } from '@/view/pages/user'
 
 export function Router() {
   const location = useLocation()
@@ -28,6 +29,8 @@ export function Router() {
         <Route path="/posts/new" element={<NewPostPage />} />
 
         <Route path="/admin/posts" element={<AdminPostsPage />} />
+
+        <Route path="/admin/users" element={<AdminUsersPage />} />
       </Route>
     </Routes>
   )

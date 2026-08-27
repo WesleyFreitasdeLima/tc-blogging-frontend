@@ -1,45 +1,68 @@
 import type { Post } from '@/shared/models/posts'
+import { postsService } from '@/shared/services/post/post.service'
+import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
 export function useController() {
   const [query, setQuery] = useState('')
 
-  const isLoading = false
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['posts', query],
 
-  const posts: Post[] = [
-    {
-      id: 1,
-      author: 'Prof. Teste',
-      content:
-        'Reflexões sobre como a escuta ativa transforma a experiência de aprender e ensinar.',
-      title: 'A universidade como espaço de escuta',
-      createdAt: '18 ago 2026',
-      readTime: 2,
+    initialPageParam: 1,
+
+    queryFn: ({ pageParam }) => {
+      if (query.trim()) {
+        return postsService.search({
+          page: pageParam,
+          search: query.trim(),
+          limit: 9,
+        })
+      }
+
+      return postsService.list({
+        page: pageParam,
+        limit: 9,
+      })
     },
-    {
-      id: 2,
-      author: 'Prof. Teste',
-      content:
-        'Reflexões sobre como a escuta ativa transforma a experiência de aprender e ensinar.',
-      title: 'A universidade como espaço de escuta',
-      createdAt: '18 ago 2026',
-      readTime: 2,
+
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length < 9) {
+        return undefined
+      }
+
+      return allPages.length + 1
     },
-    {
-      id: 3,
-      author: 'Prof. Teste',
-      content:
-        'Reflexões sobre como a escuta ativa transforma a experiência de aprender e ensinar.',
-      title: 'A universidade como espaço de escuta',
-      createdAt: '18 ago 2026',
-      readTime: 2,
-    },
-  ]
+
+    placeholderData: keepPreviousData,
+  })
+
+  const posts: Post[] = data?.pages.flatMap((page) => page) ?? []
+
+  function loadMore() {
+    fetchNextPage()
+  }
 
   return {
     query,
     setQuery,
-    isLoading,
+
     posts,
+
+    isLoading,
+    isError,
+    error,
+
+    loadMore,
+    hasNextPage,
+    isLoadingMore: isFetchingNextPage,
   }
 }
