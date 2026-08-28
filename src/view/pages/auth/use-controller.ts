@@ -1,10 +1,10 @@
-import { useMutation } from '@tanstack/react-query'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import z from 'zod'
-import { useNavigate } from 'react-router'
-import { useState } from 'react'
 import { authService } from '@/shared/services/auth/auth.service'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
+import { useNavigate } from 'react-router'
+import { useForm } from 'react-hook-form'
+import { useState } from 'react'
+import z from 'zod'
 
 const FormAuthSchema = z.object({
   login: z.string().min(1, 'Informe o login'),
@@ -14,8 +14,12 @@ const FormAuthSchema = z.object({
 type FormAuthValues = z.infer<typeof FormAuthSchema>
 
 export function useController() {
-  const [passwordView, setPasswordView] = useState(false)
   const navigate = useNavigate()
+
+  if (authService.isAuthenticated()) {
+    navigate('/')
+  }
+  const [passwordView, setPasswordView] = useState(false)
 
   const {
     register,
@@ -32,10 +36,11 @@ export function useController() {
   })
 
   const loginMutation = useMutation({
-    mutationFn: authService.login,
+    mutationFn: (data: FormAuthValues) => authService.login(data),
 
-    onSuccess: ({ accessToken }) => {
+    onSuccess: ({ accessToken, user }) => {
       authService.setToken(accessToken)
+      authService.setUser(user)
       navigate('/')
     },
 
@@ -43,12 +48,12 @@ export function useController() {
       setError('root.serverError', {
         message: error.message,
       })
-
-      return
     },
   })
 
   function onSubmitAuth(data: FormAuthValues) {
+    clearErrors('root.serverError')
+
     loginMutation.mutate(data)
   }
 
@@ -56,13 +61,24 @@ export function useController() {
     setPasswordView((state) => !state)
   }
 
+  function handleFieldChange() {
+    clearErrors('root.serverError')
+  }
+
   return {
     register,
     handleSubmit,
+
     errors,
     clearErrors,
+
     onSubmitAuth,
+
     handleViewPassword,
     passwordView,
+
+    handleFieldChange,
+
+    isLoading: loginMutation.isPending,
   }
 }

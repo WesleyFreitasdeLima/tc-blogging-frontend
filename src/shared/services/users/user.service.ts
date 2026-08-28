@@ -22,21 +22,21 @@ export const userService = {
     })
   },
 
-  async findById(id: number): Promise<User> {
-    return http<User>(`/users/${id}`, {
+  async getUser(): Promise<User> {
+    return http<User>(`/users/me`, {
       method: 'GET',
     })
   },
 
   async create(data: CreateUserRequest): Promise<User> {
-    return http<User>('/users/', {
-      method: 'User',
+    return http<User>('/users', {
+      method: 'POST',
       body: JSON.stringify(data),
     })
   },
 
-  async update(id: number, data: UpdateUserRequest): Promise<User> {
-    return http<User>(`/users/${id}`, {
+  async update(data: UpdateUserRequest): Promise<User> {
+    return http<User>(`/users/me`, {
       method: 'PUT',
       body: JSON.stringify(data),
     })

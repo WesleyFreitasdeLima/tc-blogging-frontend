@@ -1,15 +1,6 @@
 import { Button } from '@/view/components/ui/button'
-import {
-  Edit3,
-  Eye,
-  FileText,
-  PenLine,
-  Plus,
-  Search,
-  Trash2,
-} from 'lucide-react'
+import { Edit3, Plus, Search, Trash2 } from 'lucide-react'
 import { useController } from './use-controller'
-import { Metric } from './components/metric'
 import { DeletePostModal } from './components/delete-post-modal'
 import { EditPostModal } from './components/edit-post-modal'
 
@@ -17,7 +8,6 @@ export function AdminPostsPage() {
   const {
     isLoading,
     navigate,
-    posts,
     query,
     setQuery,
     filtered,
@@ -44,6 +34,7 @@ export function AdminPostsPage() {
   return (
     <>
       <div className="flex flex-col gap-10">
+        {/* Cabeçalho */}
         <div
           data-aos="fade-up"
           className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
@@ -66,35 +57,13 @@ export function AdminPostsPage() {
           </Button>
         </div>
 
+        {/* Listagem */}
         <div
           data-aos="fade-up"
           data-aos-delay="300"
-          className="grid gap-4 sm:grid-cols-3"
-        >
-          <Metric
-            icon={<FileText />}
-            label="Posts carregados"
-            value={posts.length}
-          />
-
-          <Metric
-            icon={<Eye />}
-            label="Posts encontrados"
-            value={filtered.length}
-          />
-
-          <Metric
-            icon={<PenLine />}
-            label="Página atual"
-            value={posts.length > 0 ? Math.ceil(posts.length / 10) : 0}
-          />
-        </div>
-
-        <div
-          data-aos="fade-up"
-          data-aos-delay="600"
           className="rounded-2xl border border-border bg-card shadow-sm"
         >
+          {/* Busca */}
           <div className="flex flex-col gap-4 border-b border-border p-5 md:flex-row md:items-center md:justify-between">
             <div className="flex items-center gap-3 rounded-lg border border-input px-3 py-2 md:w-80">
               <Search className="text-muted-foreground" />
@@ -106,16 +75,22 @@ export function AdminPostsPage() {
                 className="w-full bg-transparent text-sm outline-none"
               />
             </div>
+
+            {/* Quantidade encontrada */}
+            <p className="text-sm text-muted-foreground">
+              {filtered.length === 1
+                ? '1 publicação encontrada'
+                : `${filtered.length} publicações encontradas`}
+            </p>
           </div>
 
+          {/* Tabela */}
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead className="bg-secondary/50 text-xs uppercase tracking-wider text-muted-foreground">
                 <tr>
                   <th className="px-5 py-4">Publicação</th>
-
                   <th className="px-5 py-4">Autor</th>
-
                   <th className="px-5 py-4 text-right">Ações</th>
                 </tr>
               </thead>

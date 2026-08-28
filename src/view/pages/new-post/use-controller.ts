@@ -9,6 +9,7 @@ const FormNewPostSchema = z.object({
   title: z
     .string({ error: 'Título é obrigatório' })
     .min(5, { error: 'Crie um título intuitivo' }),
+
   content: z
     .string({ error: 'Conteúdo é obrigatório' })
     .min(20, { error: 'O conteúdo deve ter no mínimo 20 caracteres' }),
@@ -18,14 +19,21 @@ type FormNewPostValues = z.infer<typeof FormNewPostSchema>
 
 export function useController() {
   const navigate = useNavigate()
+
   const {
     register,
+    control,
     handleSubmit,
     setError,
     clearErrors,
     formState: { errors },
   } = useForm<FormNewPostValues>({
     resolver: zodResolver(FormNewPostSchema),
+
+    defaultValues: {
+      title: '',
+      content: '',
+    },
   })
 
   const createMutation = useMutation({
@@ -39,8 +47,6 @@ export function useController() {
       setError('root.serverError', {
         message: error.message,
       })
-
-      return
     },
   })
 
@@ -50,6 +56,7 @@ export function useController() {
 
   return {
     register,
+    control,
     handleSubmit,
     setError,
     clearErrors,

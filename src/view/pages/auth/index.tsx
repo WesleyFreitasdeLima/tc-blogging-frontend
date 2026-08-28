@@ -14,7 +14,7 @@ export function AuthPage() {
   } = useController()
   return (
     <div className="h-full mx-auto grid overflow-hidden rounded-3xl border border-border bg-card shadow-sm md:grid-cols-2">
-      <div className="bg-white/10 p-8 text-primary-foreground md:p-12 flex flex-col justify-between">
+      <div className="bg-[#009ef1] p-8 text-primary-foreground md:p-12 flex flex-col justify-between">
         <BookOpen className="size-10" />
 
         <div>

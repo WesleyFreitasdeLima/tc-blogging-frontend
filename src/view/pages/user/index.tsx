@@ -1,13 +1,11 @@
 import { Button } from '@/view/components/ui/button'
-import { Eye, FileText, PenLine, Plus, Search } from 'lucide-react'
+import { Plus, Search } from 'lucide-react'
 import { useController } from './use-controller'
-import { Metric } from './components/metric'
 
 export function AdminUsersPage() {
   const {
     isLoading,
     navigate,
-    users,
     query,
     setQuery,
     filtered,
@@ -40,34 +38,10 @@ export function AdminUsersPage() {
             <h1 className="mt-2 text-5xl">Administração</h1>
           </div>
 
-          <Button onClick={() => navigate('/users/new')}>
+          <Button onClick={() => navigate('/admin/users/new')}>
             <Plus data-icon="inline-start" />
             Novo usuário
           </Button>
-        </div>
-
-        <div
-          data-aos="fade-up"
-          data-aos-delay="300"
-          className="grid gap-4 sm:grid-cols-3"
-        >
-          <Metric
-            icon={<FileText />}
-            label="usuários carregados"
-            value={users.length}
-          />
-
-          <Metric
-            icon={<Eye />}
-            label="usuários encontrados"
-            value={filtered.length}
-          />
-
-          <Metric
-            icon={<PenLine />}
-            label="Página atual"
-            value={users.length > 0 ? Math.ceil(users.length / 10) : 0}
-          />
         </div>
 
         <div

@@ -11,9 +11,10 @@ export function PostCard({ post }: { post: Post }) {
             {post.title}
           </h3>
         </Link>
-        <p className="mt-3 line-clamp-3 text-sm leading-6 text-muted-foreground">
-          {post.content}
-        </p>
+        <p
+          className="mt-3 line-clamp-3 text-sm leading-6 text-muted-foreground"
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        ></p>
       </div>
       <div className="mt-8 flex items-center justify-between border-t border-border pt-4 text-sm">
         <span className="text-muted-foreground">{post.createdBy.name}</span>

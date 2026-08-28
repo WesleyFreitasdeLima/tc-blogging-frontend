@@ -1,6 +1,8 @@
 import { http } from '@/shared/lib/http'
+import { UserRoleEnum, type User } from '@/shared/models/user'
 
 const TOKEN_KEY = 'accessToken'
+const USER_KEY = 'user'
 
 export interface LoginRequest {
   login: string
@@ -9,6 +11,7 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   accessToken: string
+  user: User
 }
 
 export const authService = {
@@ -18,6 +21,7 @@ export const authService = {
       body: JSON.stringify(data),
     })
   },
+
   getToken() {
     return localStorage.getItem(TOKEN_KEY)
   },
@@ -30,7 +34,32 @@ export const authService = {
     localStorage.setItem(TOKEN_KEY, token)
   },
 
+  setUser(user: User) {
+    user.password = ''
+
+    localStorage.setItem(USER_KEY, JSON.stringify(user))
+  },
+
+  getUser(): User | null {
+    const user = localStorage.getItem(USER_KEY)
+
+    if (!user) {
+      return null
+    }
+
+    try {
+      return JSON.parse(user)
+    } catch {
+      return null
+    }
+  },
+
+  isAdmin() {
+    return this.getUser()?.role === UserRoleEnum.ADMIN
+  },
+
   logout() {
     localStorage.removeItem(TOKEN_KEY)
+    localStorage.removeItem(USER_KEY)
   },
 }

@@ -1,4 +1,3 @@
-import { queryClient } from '@/shared/config/query-client'
 import {
   UserRoleEnum,
   type UpdateUserRequest,
@@ -6,9 +5,10 @@ import {
 } from '@/shared/models/user'
 import { userService } from '@/shared/services/users/user.service'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router'
 import z from 'zod'
 
 export interface EditUserModalProps {
@@ -17,27 +17,18 @@ export interface EditUserModalProps {
   onOpenChange: (state: boolean) => void
 }
 
-const FormEditUserSchema = z.object({
-  name: z.string().min(1, 'Nome é obrigatório'),
-
-  username: z.string().min(1, 'Usuário é obrigatório'),
-
-  password: z.string(),
-
-  email: z.email('E-mail inválido'),
-
+const FormEditPostSchema = z.object({
+  name: z.string(),
+  username: z.string(),
+  password: z.string().optional(),
+  email: z.string(),
   role: z.enum(UserRoleEnum),
 })
 
-type FormEditUserValues = z.infer<typeof FormEditUserSchema>
+type FormEditUserValues = z.infer<typeof FormEditPostSchema>
 
-export function useController({
-  open,
-  onOpenChange,
-  user,
-}: EditUserModalProps) {
-  const openIsValid = !user ? false : open
-
+export function useController() {
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -53,19 +44,21 @@ export function useController({
       email: '',
       role: UserRoleEnum.TEACHER,
     },
-    resolver: zodResolver(FormEditUserSchema),
+    resolver: zodResolver(FormEditPostSchema),
   })
 
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['post'],
+    queryFn: () => userService.getUser(),
+  })
+
+  const user: User | null = data ?? null
+
   const editMutation = useMutation({
-    mutationFn: ({ id, data }: { id: number; data: UpdateUserRequest }) =>
-      userService.update(id, data),
+    mutationFn: (data: UpdateUserRequest) => userService.update(data),
 
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['users'],
-      })
-
-      onOpenChange(false)
+      navigate('/')
     },
 
     onError: (error) => {
@@ -85,18 +78,16 @@ export function useController({
     const payload: UpdateUserRequest = {
       name: data.name,
       username: data.username,
+      password: data.password,
       email: data.email,
       role: data.role,
     }
 
-    if (data.password.trim()) {
+    if (!data.password) {
       payload.password = data.password
     }
 
-    editMutation.mutate({
-      id: user.id,
-      data: payload,
-    })
+    editMutation.mutate(payload)
   }
 
   useEffect(() => {
@@ -121,18 +112,18 @@ export function useController({
     })
   }, [user, reset])
 
-  const saveButtonIsDisabled = !isDirty
-  console.log(errors)
   return {
-    openIsValid,
-    onOpenChange,
     user,
     register,
     handleSubmit,
     setError,
     clearErrors,
+    isLoading,
+    isError,
+    error,
     errors,
     onSubmitEditUser,
-    saveButtonIsDisabled,
+    isSaving: editMutation.isPending,
+    saveButtonIsDisabled: !isDirty,
   }
 }

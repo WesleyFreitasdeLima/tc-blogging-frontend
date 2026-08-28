@@ -38,6 +38,7 @@ export function useController({
     clearErrors,
     formState: { errors, isDirty },
     reset,
+    control,
   } = useForm<FormEditPostValues>({
     defaultValues: {
       content: post?.content,
@@ -96,6 +97,7 @@ export function useController({
   const saveButtonIsDisabled = !isDirty
 
   return {
+    control,
     openIsValid,
     onOpenChange,
     post,

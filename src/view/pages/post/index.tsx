@@ -21,6 +21,7 @@ export function PostPage() {
       </p>
       <h1
         data-aos="fade-up"
+        data-aos-delay="300"
         className="mt-4 md:max-w-10/12 text-5xl leading-tight tracking-tight md:text-6xl"
       >
         {post.title}
@@ -38,9 +39,8 @@ export function PostPage() {
         data-aos="fade-up"
         data-aos-delay="300"
         className="whitespace-pre-line text-lg leading-8 text-foreground/85"
-      >
-        {post.content}
-      </div>
+        dangerouslySetInnerHTML={{ __html: post.content }}
+      ></div>
       <div
         data-aos="fade-up"
         data-aos-delay="600"

@@ -57,6 +57,7 @@ export async function http<T>(
   console.log('Retorno: ' + JSON.stringify(body))
 
   if (!response.ok) {
+    if (response.status == 401) authService.logout()
     throw new AppError(
       body?.message ?? 'Ocorreu um erro na comunicação com a API.',
       response.status,

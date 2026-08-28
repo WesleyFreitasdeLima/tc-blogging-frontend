@@ -1,6 +1,6 @@
 import { authService } from '@/shared/services/auth/auth.service'
 import { Button } from '@/view/components/ui/button'
-import { BookOpen, LogIn, LogOut, Menu, X } from 'lucide-react'
+import { BookOpen, Edit3, LogIn, LogOut, Menu, X } from 'lucide-react'
 import { useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router'
 
@@ -20,6 +20,7 @@ export function Header() {
   const [open, setOpen] = useState(false)
 
   const isAuthenticated = authService.isAuthenticated()
+  const isAdmin = authService.isAdmin()
 
   let menuLinks: MenuLink[] = []
 
@@ -28,8 +29,10 @@ export function Header() {
       /* { link: '/', label: 'Posts' },
     { link: '/posts/new', label: 'Escrever' }, */
       { link: '/admin/posts', label: 'Administração' },
-      { link: '/admin/users', label: 'Usuários' },
     ]
+  }
+  if (isAdmin) {
+    menuLinks = [...menuLinks, { link: '/admin/users', label: 'Usuários' }]
   }
 
   function logout() {
@@ -91,9 +94,19 @@ export function Header() {
                 <>
                   <Button
                     variant="ghost"
+                    className="flex items-center gap-2"
+                    onClick={() =>
+                      navigate(`/admin/users/${authService.getUser()?.id}`)
+                    }
+                  >
+                    <Edit3 />
+                    <span>Perfil</span>
+                  </Button>
+                  <Button
+                    variant="ghost"
                     onClick={logout}
                     className="flex items-center gap-2"
-                    title="Loout do sistema."
+                    title="Logout do sistema."
                   >
                     <LogOut />
                     <span>Sair</span>

@@ -2,9 +2,12 @@ import { Button } from '@/view/components/ui/button'
 import { ArrowLeft, Check } from 'lucide-react'
 import { Link } from 'react-router'
 import { useController } from './use-controller'
+import { Controller } from 'react-hook-form'
+import { RichTextEditor } from '@/view/components/ui/rich-text-editor'
 
 export function NewPostPage() {
-  const { errors, handleSubmit, onSubmitNewPost, register } = useController()
+  const { errors, handleSubmit, onSubmitNewPost, register, control } =
+    useController()
 
   return (
     <div className="mx-auto max-w-3xl">
@@ -50,17 +53,17 @@ export function NewPostPage() {
         <div className="space-y-2">
           <label className="flex flex-col gap-2 text-sm font-semibold">
             Conteúdo
-            <textarea
-              className="min-h-64 resize-y rounded-xl border border-input bg-card px-4 py-3 font-normal leading-7 outline-none ring-primary focus:ring-2"
-              placeholder="Escreva a sua reflexão..."
-              {...register('content')}
+            <Controller
+              name="content"
+              control={control}
+              render={({ field }) => (
+                <RichTextEditor value={field.value} onChange={field.onChange} />
+              )}
             />
           </label>
 
           {errors.content?.message && (
-            <p className="text-sm text-destructive">
-              {errors.content?.message}
-            </p>
+            <p className="text-sm text-destructive">{errors.content.message}</p>
           )}
         </div>
 
