@@ -19,7 +19,15 @@ Front-end para um sistema de blog, desenvolvida como parte do Tech Challenge da 
 
 Antes de começar você vai precisar ter instalado na sua máquina as ferramentas [Git](https://git-scm.com/).
 
-## ⚡ Executando o projeto
+## ⚡ Executando o projeto Backend
+
+1. Siga as intruções do projeto abaixo para utilizar a aplicação backend.
+
+```
+  https://github.com/WesleyFreitasdeLima/tc-blogging-backend
+```
+
+## ⚡ Executando o projeto Ffrontend
 
 1. Clone o repositório
 
@@ -33,13 +41,22 @@ Antes de começar você vai precisar ter instalado na sua máquina as ferramenta
   npm install
 ```
 
-3. Rode o comando para rodar a aplicação
+3.  Crie um arquivo `.env` na raiz do projeto.
+
+4.  Configure a url da aplicação backend no arquivo `.env`.
+
+```env
+# URL da aplicação Backend
+API_URL=http://localhost:3000/api
+```
+
+5.  Rode o comando para rodar a aplicação
 
 ```
   npm run dev
 ```
 
-4. Acesse pelo navegador
+6. Acesse pelo navegador
 
 ```
   http://localhost:5173

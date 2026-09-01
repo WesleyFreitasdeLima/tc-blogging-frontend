@@ -1,4 +1,6 @@
 import type { Post } from '@/shared/models/posts'
+import { postsService } from '@/shared/services/post/post.service'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 
@@ -10,25 +12,47 @@ export function useController() {
 
   const [postSelected, setPostSelected] = useState<Post | null>(null)
 
-  const posts: Post[] = [
-    {
-      id: 1,
-      author: 'Prof. Teste',
-      content:
-        'Reflexões sobre como a escuta ativa transforma a experiência de aprender e ensinar.',
-      title: 'A universidade como espaço de escuta',
-      createdAt: '18 ago 2026',
-      readTime: 2,
-    },
-  ]
-
   const [query, setQuery] = useState('')
 
-  const isLoading = false
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['posts'],
+
+    initialPageParam: 1,
+
+    queryFn: ({ pageParam }) =>
+      postsService.list({
+        page: pageParam,
+        limit: 9,
+      }),
+
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length < 9) {
+        return undefined
+      }
+
+      return allPages.length + 1
+    },
+  })
+
+  const posts: Post[] = data?.pages.flatMap((page) => page) ?? []
 
   const filtered = posts.filter((p) =>
-    `${p.title} ${p.author}`.toLowerCase().includes(query.toLowerCase()),
+    `${p.title} ${p.createdBy.name}`
+      .toLowerCase()
+      .includes(query.toLowerCase()),
   )
+
+  function loadMore() {
+    fetchNextPage()
+  }
 
   function toggleDeletePostModal(state: boolean | null, post: Post | null) {
     if (!deletePostModalIsOpen) {
@@ -36,6 +60,7 @@ export function useController() {
       setPostSelected(post)
     } else {
       setDeletePostModalIsOpen(state ?? false)
+
       setTimeout(() => {
         setPostSelected(null)
       }, 300)
@@ -48,6 +73,7 @@ export function useController() {
       setPostSelected(post)
     } else {
       setEditPostModalIsOpen(state ?? false)
+
       setTimeout(() => {
         setPostSelected(null)
       }, 300)
@@ -56,14 +82,26 @@ export function useController() {
 
   return {
     navigate,
+
     posts,
+    filtered,
+
     query,
     setQuery,
+
     isLoading,
-    filtered,
+    isError,
+    error,
+
+    loadMore,
+    hasNextPage,
+    isLoadingMore: isFetchingNextPage,
+
     postSelected,
+
     toggleDeletePostModal,
     deletePostModalIsOpen,
+
     toggleEditPostModal,
     editPostModalIsOpen,
   }

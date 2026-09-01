@@ -21,17 +21,17 @@ export function PostPage() {
       </p>
       <h1
         data-aos="fade-up"
+        data-aos-delay="300"
         className="mt-4 md:max-w-10/12 text-5xl leading-tight tracking-tight md:text-6xl"
       >
         {post.title}
       </h1>
 
       <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
-        <span>{post.author}</span>
+        <span>{post.createdBy.name}</span>
         <span>·</span>
-        <span>{post.createdAt}</span>
+        <span>{new Date(post.createdAt).toLocaleString('pt-BR')}</span>
         <span>·</span>
-        <span>{post.readTime} min de leitura</span>
       </div>
 
       <div className="my-12 h-px bg-border" />
@@ -39,9 +39,8 @@ export function PostPage() {
         data-aos="fade-up"
         data-aos-delay="300"
         className="whitespace-pre-line text-lg leading-8 text-foreground/85"
-      >
-        {post.content}
-      </div>
+        dangerouslySetInnerHTML={{ __html: post.content }}
+      ></div>
       <div
         data-aos="fade-up"
         data-aos-delay="600"

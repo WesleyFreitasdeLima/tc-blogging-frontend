@@ -3,7 +3,15 @@ import { PostsList } from './components/posts-list'
 import { useController } from './use-controller'
 
 export function HomePage() {
-  const { isLoading, posts, query, setQuery } = useController()
+  const {
+    isLoading,
+    posts,
+    query,
+    setQuery,
+    loadMore,
+    hasNextPage,
+    isLoadingMore,
+  } = useController()
 
   return (
     <div>
@@ -33,7 +41,7 @@ export function HomePage() {
               aria-label="Buscar posts"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Buscar por título ou autor"
+              placeholder="Buscar por título ou conteúdo"
               className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
             />
           </div>
@@ -41,14 +49,20 @@ export function HomePage() {
           <div>
             <p className="text-sm text-muted-foreground">
               {!isLoading
-                ? `${posts.length} publica${posts.length > 1 ? 'ções' : 'ção'} encontra${posts.length > 1 ? 'das' : 'da'}`
+                ? `${posts.length ?? 0} publica${posts.length > 1 ? 'ções' : 'ção'} encontra${posts.length > 1 ? 'das' : 'da'}`
                 : 'Carregando publicações...'}
             </p>
           </div>
         </div>
       </section>
 
-      <PostsList isLoading={isLoading} posts={posts} />
+      <PostsList
+        isLoading={isLoading}
+        posts={posts}
+        loadMore={loadMore}
+        hasNextPage={hasNextPage}
+        isLoadingMore={isLoadingMore}
+      />
     </div>
   )
 }

@@ -1,7 +1,8 @@
+import { authService } from '@/shared/services/auth/auth.service'
 import { Button } from '@/view/components/ui/button'
-import { BookOpen, LogIn, LogOut, Menu, X } from 'lucide-react'
+import { BookOpen, Edit3, LogIn, LogOut, Menu, X } from 'lucide-react'
 import { useState } from 'react'
-import { Link, NavLink } from 'react-router'
+import { Link, NavLink, useNavigate } from 'react-router'
 
 export interface User {
   id: string
@@ -9,18 +10,36 @@ export interface User {
   email: string
   role: 'admin'
 }
-
+interface MenuLink {
+  link: string
+  label: string
+}
 export function Header() {
+  const navigate = useNavigate()
   const [user] = useState<User | null>(null)
   const [open, setOpen] = useState(false)
 
-  const menuLinks = [
-    { link: '/', label: 'Posts' },
-    { link: '/posts/new', label: 'Escrever' },
-    { link: '/admin/posts', label: 'Administração' },
-  ]
+  const isAuthenticated = authService.isAuthenticated()
+  const isAdmin = authService.isAdmin()
 
-  function logout() {}
+  let menuLinks: MenuLink[] = []
+
+  if (isAuthenticated) {
+    menuLinks = [
+      /* { link: '/', label: 'Posts' },
+    { link: '/posts/new', label: 'Escrever' }, */
+      { link: '/admin/posts', label: 'Administração' },
+    ]
+  }
+  if (isAdmin) {
+    menuLinks = [...menuLinks, { link: '/admin/users', label: 'Usuários' }]
+  }
+
+  function logout() {
+    authService.logout()
+
+    navigate('/')
+  }
 
   return (
     <header className="sticky top-0 z-30 border-b border-border/70 bg-background/95 backdrop-blur">
@@ -70,11 +89,38 @@ export function Header() {
               </Button>
             </>
           ) : (
-            <Button variant="outline" asChild>
-              <Link to="/auth">
-                <LogIn className="mr-1" data-icon="inline-start" /> Entrar
-              </Link>
-            </Button>
+            <div className="hidden items-center gap-3 md:flex">
+              {isAuthenticated ? (
+                <>
+                  <Button
+                    variant="ghost"
+                    className="flex items-center gap-2"
+                    onClick={() =>
+                      navigate(`/admin/users/${authService.getUser()?.id}`)
+                    }
+                  >
+                    <Edit3 />
+                    <span>Perfil</span>
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    onClick={logout}
+                    className="flex items-center gap-2"
+                    title="Logout do sistema."
+                  >
+                    <LogOut />
+                    <span>Sair</span>
+                  </Button>
+                </>
+              ) : (
+                <Button variant="outline" asChild>
+                  <Link to="/auth">
+                    <LogIn className="mr-1" data-icon="inline-start" />
+                    Entrar
+                  </Link>
+                </Button>
+              )}
+            </div>
           )}
         </div>
 
@@ -96,14 +142,19 @@ export function Header() {
           ))}
 
           {user ? (
-            <button
-              className="flex items-center gap-2 text-left text-muted-foreground"
+            <Button
+              variant="ghost"
               onClick={logout}
+              className="flex items-center gap-2"
+              title="Loout do sistema."
             >
-              <LogOut /> Sair
-            </button>
+              <LogOut />
+              <span>Sair</span>
+            </Button>
           ) : (
-            <Link to="/auth">Entrar</Link>
+            <Link to="/auth" title="Login no sistema">
+              Entrar
+            </Link>
           )}
         </div>
       )}
