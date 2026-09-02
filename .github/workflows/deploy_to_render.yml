@@ -1,0 +1,24 @@
+name: Deploy to Render
+
+on:
+  push:
+    branches:
+      - feature/ci-cd-frontend
+  workflow_run:
+    workflows: ['Deploy to Docker Hub']
+    types:
+      - completed
+    branches:
+      - feature/ci-cd-frontend
+
+  # Allows manual execution from the GitHub Actions UI
+  workflow_dispatch:
+
+jobs:
+  deploy_render:
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' || github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run Deploy Hook
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
