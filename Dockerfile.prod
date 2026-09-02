@@ -1,15 +1,21 @@
-# Build React/Vite
-FROM node:20-alpine AS builder
+# --- Stage 1: Build React/Vite ---
+# Uses a multi-stage build to keep the final production image lightweight
+FROM node:24-alpine AS builder
 WORKDIR /app
-COPY package.json package-lock.json* ./
-RUN npm ci
-COPY . .
-CMD ["npm", "run", "build"]
 
-# NGINX Server
+# Copies package files first to leverage Docker layer caching
+COPY package*.json ./
+RUN npm ci 
+
+COPY . .
+RUN npm run build
+
+# --- Stage 2: NGInx (Production) ---
 FROM nginx:alpine
 RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d/
+
+# Retrieves only the compiled output from the builder stage, discarding source code
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 EXPOSE 80
