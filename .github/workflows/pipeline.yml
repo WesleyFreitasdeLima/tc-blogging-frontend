@@ -48,10 +48,16 @@ jobs:
           file: ./Dockerfile.prod
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/tc-blogging-frontend:latest
+          # Injects the repository variable into the Docker build context for Vite compilation
+          build-args: |
+            VITE_API_URL=${{ vars.BACKEND_API_URL }}
+          # Forces a clean build by bypassing layer cache to ensure environment variables are evaluated
+          no-cache: true
 
   render:
     needs: dockerhub
     runs-on: ubuntu-latest
     steps:
       - name: Run Deploy Hook
+        # Triggers Render's webhook to pull the latest image and update production
         run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
