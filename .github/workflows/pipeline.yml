@@ -3,7 +3,8 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - feature/ci-cd-frontend
+      - main
+
   workflow_dispatch:
 
 jobs:
