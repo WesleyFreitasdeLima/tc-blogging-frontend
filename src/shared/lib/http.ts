@@ -1,7 +1,7 @@
 import { AppError } from '../erros/error'
 import { authService } from '../services/auth/auth.service'
 
-const API_URL = import.meta.env.API_URL ?? 'http://localhost:3000/api'
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api'
 
 type HttpParam = string | number | boolean
 

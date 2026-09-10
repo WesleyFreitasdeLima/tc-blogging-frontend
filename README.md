@@ -23,6 +23,7 @@ A aplicação segue uma arquitetura em camadas, separando regras de negócio e c
 - **AOS (Animate On Scroll)**: Animações de rolagem.
 - **ESLint + Prettier + Husky + lint-staged**: Padronização e qualidade de código.
 - **Docker e Docker Compose**: Containerização da aplicação.
+- **Nginx**: Servidor web de alta performance para entrega de arquivos estáticos em produção.
 
 ### Estrutura do Projeto
 
@@ -59,13 +60,13 @@ src/
 
 ```env
 # URL da aplicação Backend
-API_URL=http://localhost:3000/api
+VITE_API_URL=http://localhost:3000/api
 ```
 
 > **⚠️ Aviso de Segurança:**
 >
 > - Não exponha o `.env` em repositórios públicos.
-> - `API_URL` deve apontar para uma instância confiável do backend, evitando URLs de origem desconhecida.
+> - `VITE_API_URL` deve apontar para uma instância confiável do backend, evitando URLs de origem desconhecida.
 
 ## Como Executar
 
@@ -151,16 +152,29 @@ A aplicação consome a API do backend para autenticação e gerenciamento de po
 
 ## CI/CD (Integração e Entrega Contínua)
 
-O pipeline de CI/CD deste projeto é orquestrado via **GitHub Actions**, estruturado para garantir qualidade e segurança em cada etapa. O fluxo é dividido em jobs sequenciais:
+O pipeline de CI/CD deste projeto está automatizado via **GitHub Actions** utilizando uma abordagem robusta de **estágios sequenciais (`needs`)**, garantindo validação de código, containerização com Docker multi-stage (Nginx) e atualização automática do ambiente de produção.
 
-1. **Build**
-   - Clona o repositório e configura o ambiente Node.js.
-   - Instala as dependências de forma limpa (`npm ci`).
-   - Executa lint e compila o projeto (TypeScript + Vite).
+### Arquitetura do Pipeline
 
-2. **Deploy** (Restrito à branch principal e executado após o build)
-   - Constrói a imagem Docker da aplicação e faz o push para o registro de containers.
-   - Aciona o deploy automático da nova versão na plataforma de hospedagem.
+O fluxo de integração e entrega contínua executa os seguintes jobs de ponta a ponta:
+
+1. **Build (`build`)**
+
+- Configura o ambiente Node.js na versão LTS.
+- Instala as dependências de forma otimizada (`npm ci`).
+- Compila o código TypeScript e executa o empacotamento estático da aplicação via Vite (`npm run build`).
+
+2. **Docker Hub (`dockerhub`)** — _Executado apenas após o sucesso do Build_
+
+- Configura o Docker Buildx para otimização de camadas.
+- Realiza autenticação segura no Docker Hub utilizando Secrets do GitHub.
+- Constrói a imagem de produção utilizando um `Dockerfile.prod` em múltiplos estágios (separando a compilação Node.js da entrega estática via Nginx).
+- Injeta a URL da API de produção em tempo de build (`build-args`) de forma dinâmica, publicando a imagem atualizada no Docker Hub.
+
+3. **Deploy Automatizado no Render (`render`)** — _Executado após o sucesso do push da imagem_
+
+- Dispara uma requisição HTTP via webhook (`Deploy Hook`) para o Render.
+- O Render puxa automaticamente a nova imagem contida no Docker Hub e atualiza o serviço web em tempo de execução sem indisponibilidade.
 
 ## Relato de Experiências e Desafios
 
@@ -173,6 +187,8 @@ Durante o desenvolvimento deste projeto, a equipe enfrentou e superou diversos d
 - **Editor de texto rico**: A criação e edição de posts exigiu a integração de um editor de texto rico (TipTap), garantindo a formatação do conteúdo HTML de forma consistente entre a criação, edição e exibição dos posts.
 
 - **Controle de acesso por perfil**: A aplicação precisou lidar com diferentes níveis de acesso (público, autenticado e administrador), o que levou à criação de rotas protegidas reutilizáveis que verificam autenticação e papel do usuário antes de renderizar as páginas.
+
+- **Configuração de Variáveis de Ambiente em Single Page Applications (SPAs)**: Como o React/Vite compila a aplicação em arquivos estáticos no momento do _build_, superamos o desafio de injetar a URL da API de produção garantindo que o Docker recebesse os argumentos corretos (`build-args`) a partir das variáveis de repositório do GitHub Actions, permitindo a correta comunicação com o backend hospedado no Render.
 
 ## Autores
 
