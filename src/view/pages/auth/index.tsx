@@ -1,5 +1,5 @@
 import { Button } from '@/view/components/ui/button'
-import { ArrowRight, BookOpen, Eye, EyeClosed } from 'lucide-react'
+import { ArrowRight, BookOpen, Eye, EyeClosed, Loader2 } from 'lucide-react'
 import { useController } from './use-controller'
 
 export function AuthPage() {
@@ -11,6 +11,7 @@ export function AuthPage() {
     onSubmitAuth,
     handleViewPassword,
     passwordView,
+    isSubmitting,
   } = useController()
   return (
     <div className="h-full mx-auto grid overflow-hidden rounded-3xl border border-border bg-card shadow-sm md:grid-cols-2">
@@ -86,8 +87,14 @@ export function AuthPage() {
             </div>
           </label>
         </div>
-        <Button type="submit" className="mt-2">
-          Entrar <ArrowRight data-icon="inline-end" />
+
+        <Button type="submit" className="mt-2" disabled={isSubmitting}>
+          Entrar
+          {isSubmitting ? (
+            <Loader2 data-icon="inline-end" className="w-4 h-4 animate-spin" />
+          ) : (
+            <ArrowRight data-icon="inline-end" />
+          )}
         </Button>
       </form>
     </div>
