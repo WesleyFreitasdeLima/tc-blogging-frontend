@@ -27,7 +27,7 @@ export function EditPostModal(props: EditPostModalProps) {
 
   return (
     <Sheet open={openIsValid} onOpenChange={onOpenChange}>
-      <SheetContent>
+      <SheetContent className="overflow-y-auto">
         <form onSubmit={handleSubmit(onSubmitEditPost)}>
           <SheetHeader>
             <SheetTitle>Editar postagem</SheetTitle>

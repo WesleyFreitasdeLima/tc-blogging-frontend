@@ -37,6 +37,7 @@ export function Header() {
 
   function logout() {
     authService.logout()
+    setOpen(false)
 
     navigate('/')
   }
@@ -70,7 +71,7 @@ export function Header() {
           </nav>
         </div>
 
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="items-center gap-3 md:flex">
           {user ? (
             <>
               <div className="flex items-center gap-2 border-l border-border pl-4 text-sm">
@@ -89,12 +90,12 @@ export function Header() {
               </Button>
             </>
           ) : (
-            <div className="hidden items-center gap-3 md:flex">
+            <div className="flex items-center gap-3">
               {isAuthenticated ? (
                 <>
                   <Button
                     variant="ghost"
-                    className="flex items-center gap-2"
+                    className="items-center gap-2 hidden md:flex"
                     onClick={() =>
                       navigate(`/admin/users/${authService.getUser()?.id}`)
                     }
@@ -105,11 +106,21 @@ export function Header() {
                   <Button
                     variant="ghost"
                     onClick={logout}
-                    className="flex items-center gap-2"
+                    className="items-center gap-2 hidden md:flex"
                     title="Logout do sistema."
                   >
                     <LogOut />
                     <span>Sair</span>
+                  </Button>
+
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="md:hidden"
+                    aria-label="Abrir menu"
+                    onClick={() => setOpen(!open)}
+                  >
+                    {open ? <X /> : <Menu />}
                   </Button>
                 </>
               ) : (
@@ -123,16 +134,6 @@ export function Header() {
             </div>
           )}
         </div>
-
-        <Button
-          variant="ghost"
-          size="icon"
-          className="md:hidden"
-          aria-label="Abrir menu"
-          onClick={() => setOpen(!open)}
-        >
-          {open ? <X /> : <Menu />}
-        </Button>
       </div>
 
       {open && (
@@ -141,20 +142,20 @@ export function Header() {
             <Link to={link.link}>{link.label}</Link>
           ))}
 
-          {user ? (
+          {isAuthenticated ? (
             <Button
-              variant="ghost"
               onClick={logout}
-              className="flex items-center gap-2"
               title="Loout do sistema."
+              className="w-fit px-7"
             >
-              <LogOut />
               <span>Sair</span>
             </Button>
           ) : (
-            <Link to="/auth" title="Login no sistema">
-              Entrar
-            </Link>
+            <Button className="w-fit px-7" asChild>
+              <Link to="/auth" title="Login no sistema">
+                Entrar
+              </Link>
+            </Button>
           )}
         </div>
       )}

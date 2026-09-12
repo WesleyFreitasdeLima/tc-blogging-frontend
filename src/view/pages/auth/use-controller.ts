@@ -19,14 +19,14 @@ export function useController() {
   if (authService.isAuthenticated()) {
     navigate('/')
   }
-  const [passwordView, setPasswordView] = useState(false)
+  const [passwordView, setPasswordView] = useState(true)
 
   const {
     register,
     handleSubmit,
     setError,
     clearErrors,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<FormAuthValues>({
     resolver: zodResolver(FormAuthSchema),
     defaultValues: {
@@ -51,10 +51,10 @@ export function useController() {
     },
   })
 
-  function onSubmitAuth(data: FormAuthValues) {
+  async function onSubmitAuth(data: FormAuthValues) {
     clearErrors('root.serverError')
 
-    loginMutation.mutate(data)
+    await loginMutation.mutateAsync(data)
   }
 
   function handleViewPassword() {
@@ -80,5 +80,7 @@ export function useController() {
     handleFieldChange,
 
     isLoading: loginMutation.isPending,
+
+    isSubmitting,
   }
 }
